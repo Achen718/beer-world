@@ -23,7 +23,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <!-- Nav Drawer Start -->
-    <v-navigation-drawer v-model="drawer" flat>
+    <v-navigation-drawer v-model="drawer" clipped>
       <v-list>
         <v-list-tile>
           <v-list-tile-title class="title mb-2 text-uppercase text-md-center">MENU</v-list-tile-title>
@@ -31,10 +31,10 @@
         <!-- Menu Options via data object -->
         <v-list-tile v-for="item in navItems" :key="item.title">
           <v-list-tile-action>
-            <v-icon class="white--text">test 1</v-icon>
+            <v-icon class="black--text">{{ item.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title class="nav-drawer-link">{{ item.icon }}</v-list-tile-title>
+            <v-list-tile-title class="nav-drawer-link">{{ item.title }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -44,13 +44,8 @@
 </template>
 
 <script>
-import SearchBar from "@/components/SearchBar";
-
 export default {
   name: "Navigation",
-  components: {
-    SearchBar
-  },
   data() {
     return {
       drawer: false,

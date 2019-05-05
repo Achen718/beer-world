@@ -1,10 +1,24 @@
 <template>
   <div>
-    <h1 class="subheading grey--text my-2">Choose Your Beer!</h1>
+    <h1 class="subheading my-2">Choose Your Beer!</h1>
     <v-container fluid>
+      <!-- search bar / sort button -->
+      <v-layout>
+        <v-form>
+          <v-text-field
+            class="mx-3"
+            flat
+            type="text"
+            label="Search"
+            v-model="search"
+            prepend-inner-icon="search"
+          ></v-text-field>
+        </v-form>
+      </v-layout>
+
       <v-layout row wrap>
         <!-- Beer List -->
-        <v-flex md6 sm12 xs12 v-for="beer in showBeers" :key="beer.id">
+        <v-flex md6 sm12 xs12 v-for="beer in filteredBeers" :key="beer.id">
           <v-card flat :hover="true" class="ma-2">
             <v-layout row>
               <v-flex xs4>
@@ -35,12 +49,19 @@ export default {
     return {
       beers: [],
       page: 1,
-      bottom: false
+      bottom: false,
+      search: ""
     };
   },
   computed: {
     showBeers() {
-      return this.beers;
+			return this.beers;
+		},
+		// search beers
+    filteredBeers() {
+      return this.beers.filter(beer => {
+        return beer.name.toLowerCase().includes(this.search.toLowerCase());
+      });
     }
   },
   watch: {
@@ -52,7 +73,7 @@ export default {
     }
   },
   created() {
-		// on scroll to bottom, set bottom true
+    // on scroll to bottom, set bottom true
     window.addEventListener("scroll", () => {
       this.bottom = this.infiniteScroll();
     });
@@ -67,29 +88,22 @@ export default {
           if (this.beers.length < 1) {
             this.beers = response.data;
           } else {
-            // generates beers on infinite scroll
+            // generates beers on infinite scroll -- next page
             let beers = this.beers.concat(response.data);
             this.beers = beers;
           }
         })
         .catch(e => console.log(e.response));
     },
-    // Find the bottom of the window to implement infinite scroll
+    // Infinite scroll
     infiniteScroll() {
-      // const y = window.scrollY;
-      // const visible = document.documentElement.clientHeight;
-      // const pageHeight = document.documentElement.scrollHeight;
-      // const bottomOfPage = visible + y >= pageHeight;
-			// return bottomOfPage || pageHeight < visible;
+      let bottomOfWindow =
+        document.documentElement.scrollTop + window.innerHeight ===
+        document.documentElement.offsetHeight;
 
-  let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-
-  if (bottomOfWindow) {
-    return bottomOfWindow
-  }
-
-			// Scroll to bottom
-			// return boolean
+      if (bottomOfWindow) {
+        return bottomOfWindow;
+      }
     }
   }
 };
