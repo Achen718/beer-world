@@ -4,18 +4,31 @@
     <v-container fluid>
       <!-- search bar / sort button -->
       <v-layout>
-        <v-form>
-          <v-text-field
-            class="mx-3"
-            flat
-            type="text"
-            label="Search"
-            v-model="search"
-            prepend-inner-icon="search"
-          ></v-text-field>
-        </v-form>
-      </v-layout>
+        <v-text-field
+          md3
+          class="mx-3"
+          flat
+          type="text"
+          label="Search"
+          v-model="search"
+          prepend-inner-icon="search"
+        ></v-text-field>
+        <!-- <div v-for v-for="beer in filteredBeers" :key="beer.name"> -->
+        <v-btn color="warning" fab dark @click="sortByAlpha">
+          <v-icon>sort_by_alpha</v-icon>
+        </v-btn>
+        <!-- </div> -->
 
+        <!-- <v-flex xs12 sm4 md3>
+        <p>Overflow</p>
+
+        <v-overflow-btn
+          :items="dropdown_font"
+          label="Overflow Btn"
+          target="#dropdown-example"
+        ></v-overflow-btn>
+        </v-flex>-->
+      </v-layout>
       <v-layout row wrap>
         <!-- Beer List -->
         <v-flex md6 sm12 xs12 v-for="beer in filteredBeers" :key="beer.id">
@@ -50,19 +63,23 @@ export default {
       beers: [],
       page: 1,
       bottom: false,
-      search: ""
+			search: "",
+			sorting: -1
     };
   },
   computed: {
     showBeers() {
-			return this.beers;
-		},
-		// search beers
+      return this.beers;
+    },
+    // search beers
     filteredBeers() {
       return this.beers.filter(beer => {
         return beer.name.toLowerCase().includes(this.search.toLowerCase());
-      });
-    }
+			});
+		},
+		sortedItems () {
+			
+		}
   },
   watch: {
     // generates beer on scroll
@@ -88,15 +105,18 @@ export default {
           if (this.beers.length < 1) {
             this.beers = response.data;
           } else {
-            // generates beers on infinite scroll -- next page
+            // generates beers on infinite scroll
             let beers = this.beers.concat(response.data);
             this.beers = beers;
-          }
+					}
+					//  next page on scroll
+					this.page += 1;
         })
         .catch(e => console.log(e.response));
     },
     // Infinite scroll
     infiniteScroll() {
+			// reach window bottom
       let bottomOfWindow =
         document.documentElement.scrollTop + window.innerHeight ===
         document.documentElement.offsetHeight;
@@ -104,6 +124,38 @@ export default {
       if (bottomOfWindow) {
         return bottomOfWindow;
       }
+		},
+		// sort beer alphabetically A-Z,
+    sortByAlpha() {
+			let $vm = this
+
+      // this.beers.sort(function(a, b) {
+        // let textA = a.name.toLowerCase();
+				// let textB = b.name.toLowerCase();
+			// 	// console.log(this.sorted)
+			// 	if ($vm.sorted) {
+
+			// 		console.log(textA.localeCompare(textB))
+			// 		return -1;
+			// 	} 
+
+			// });
+			
+
+
+
+
+
+
+			// 	const compare = (a, b) => {
+			// 	let textA = a.name.toLowerCase();
+			// 	let textB = b.name.toLowerCase();
+			// 	console.log(textA < textB ? -1 : textB > textA ? 1 : 0)
+			// 	return textA < textB ? -1 : textB > textA ? 1 : 0;
+					
+			// }
+			// // console.log(this.beers.sort(compare))
+			// 	return this.sorted *= this.beers.sort(compare)
     }
   }
 };

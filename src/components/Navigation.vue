@@ -10,9 +10,6 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <!-- Search Options -->
-      <!-- <SearchBar/> -->
-      <v-spacer></v-spacer>
       <!-- Avatar Link -->
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn flat route to="/about" fab>
