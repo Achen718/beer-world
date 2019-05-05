@@ -4,26 +4,14 @@
     <v-container fluid>
       <v-layout row wrap>
         <!-- Beer List -->
-        <v-flex md6 sm12 xs12 v-for="beer in filteredBeers" :key="beer.id">
-          <v-card
-            flat
-            :hover="true"
-            class="ma-2"
-          >
+        <v-flex md6 sm12 xs12 v-for="beer in showBeers" :key="beer.id">
+          <v-card flat :hover="true" class="ma-2">
             <v-layout row>
               <v-flex xs4>
-                <v-img
-                  :src="beer.image_url"
-                  :contain="true"
-                  height="200px"
-                  class="mt-3 mb-3"
-                ></v-img>
+                <v-img :src="beer.image_url" :contain="true" height="200px" class="mt-3 mb-3"></v-img>
               </v-flex>
               <v-flex xs8>
-                <v-card-title
-                  primary-title
-                  class="beer-card"
-                >
+                <v-card-title primary-title class="beer-card">
                   <div>
                     <h3 class="subtitle">{{ beer.name }}</h3>
                     <h4 class="body-2">{{ beer.tagline }}</h4>
@@ -47,53 +35,50 @@ export default {
     return {
       beers: [],
       page: 1,
-      bottom: false,
-			search: ""
+      bottom: false
     };
   },
-  created () {
-    window.addEventListener("scroll", () => {
-      this.bottom = this.bottomVisible();
-    });
-    this.generateBeer();
+  computed: {
+    showBeers() {
+      return this.beers;
+    }
   },
   watch: {
-    bottom(bottom) {
-      if (bottom) {
+    // generates beer on scroll
+    bottom(oldVal) {
+      if (oldVal) {
         this.generateBeer();
       }
     }
   },
-  computed: {
-    filteredBeers () {
-      return this.beers.filter(beer => {
-        return beer.name.toLowerCase().includes(this.search.toLowerCase());
-      });
-    }
+  created() {
+    window.addEventListener("scroll", () => {
+      this.bottom = this.infiniteScroll();
+    });
+    this.generateBeer();
   },
   methods: {
     // api call -- fetch beer
-    generateBeer () {
+    generateBeer() {
       this.$http
         .get(`/beers?page=${this.page}&per_page=10`)
         .then(response => {
-          if (this.beers.length === 0) {
+          if (this.beers.length < 1) {
             this.beers = response.data;
           } else {
-            // this.beers avoids mutation when concat() is used
-            let newBeers = this.beers.concat(response.data);
-            this.beers = newBeers;
+            // enables infinite scroll
+            let beers = this.beers.concat(response.data);
+            this.beers = beers;
           }
-          this.page += 1;
-				})
-				console.log(this.$http.get)
+        })
+        .catch(e => console.log(e.response));
     },
     // Find the bottom of the window to implement infinite scroll
-    bottomVisible () {
-      const scrollY = window.scrollY;
+    infiniteScroll() {
+      const y = window.scrollY;
       const visible = document.documentElement.clientHeight;
       const pageHeight = document.documentElement.scrollHeight;
-      const bottomOfPage = visible + scrollY >= pageHeight;
+      const bottomOfPage = visible + y >= pageHeight;
       return bottomOfPage || pageHeight < visible;
     }
   }
@@ -101,5 +86,4 @@ export default {
 </script>
 
 <style>
-
 </style>

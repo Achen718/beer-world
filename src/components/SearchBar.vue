@@ -13,7 +13,13 @@
 
 <script>
 export default {
-	
+  computed: {
+    filteredBeers () {
+      return this.beers.filter(beer => {
+        return beer.name.toLowerCase().includes(this.search.toLowerCase());
+      });
+    }
+  },
 };
 </script>
 
