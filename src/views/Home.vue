@@ -52,6 +52,7 @@ export default {
     }
   },
   created() {
+		// on scroll to bottom, set bottom true
     window.addEventListener("scroll", () => {
       this.bottom = this.infiniteScroll();
     });
@@ -66,7 +67,7 @@ export default {
           if (this.beers.length < 1) {
             this.beers = response.data;
           } else {
-            // enables infinite scroll
+            // generates beers on infinite scroll
             let beers = this.beers.concat(response.data);
             this.beers = beers;
           }
@@ -75,11 +76,20 @@ export default {
     },
     // Find the bottom of the window to implement infinite scroll
     infiniteScroll() {
-      const y = window.scrollY;
-      const visible = document.documentElement.clientHeight;
-      const pageHeight = document.documentElement.scrollHeight;
-      const bottomOfPage = visible + y >= pageHeight;
-      return bottomOfPage || pageHeight < visible;
+      // const y = window.scrollY;
+      // const visible = document.documentElement.clientHeight;
+      // const pageHeight = document.documentElement.scrollHeight;
+      // const bottomOfPage = visible + y >= pageHeight;
+			// return bottomOfPage || pageHeight < visible;
+
+  let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+
+  if (bottomOfWindow) {
+    return bottomOfWindow
+  }
+
+			// Scroll to bottom
+			// return boolean
     }
   }
 };
