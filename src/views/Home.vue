@@ -14,7 +14,7 @@
           prepend-inner-icon="search"
         ></v-text-field>
         <!-- <div v-for v-for="beer in filteredBeers" :key="beer.name"> -->
-        <v-btn color="warning" fab dark @click="sortByAlpha">
+        <v-btn color="warning" fab dark @click="sorting *= -1">
           <v-icon>sort_by_alpha</v-icon>
         </v-btn>
         <!-- </div> -->
@@ -77,8 +77,14 @@ export default {
         return beer.name.toLowerCase().includes(this.search.toLowerCase());
 			});
 		},
+		// sort alphabetically
 		sortedItems () {
-			
+				const compare = (a, b) => {
+				let textA = a.name.toLowerCase();
+				let textB = b.name.toLowerCase();
+				return a.name < b.name ? this.sorting : -this.sorting;
+			}
+				return this.beers.sort(compare)
 		}
   },
   watch: {
@@ -87,7 +93,11 @@ export default {
       if (oldVal) {
         this.generateBeer();
       }
-    }
+		},
+		sortedItems () {
+				console.log('test')
+    	
+    },
   },
   created() {
     // on scroll to bottom, set bottom true
@@ -124,40 +134,8 @@ export default {
       if (bottomOfWindow) {
         return bottomOfWindow;
       }
-		},
-		// sort beer alphabetically A-Z,
-    sortByAlpha() {
-			let $vm = this
-
-      // this.beers.sort(function(a, b) {
-        // let textA = a.name.toLowerCase();
-				// let textB = b.name.toLowerCase();
-			// 	// console.log(this.sorted)
-			// 	if ($vm.sorted) {
-
-			// 		console.log(textA.localeCompare(textB))
-			// 		return -1;
-			// 	} 
-
-			// });
-			
-
-
-
-
-
-
-			// 	const compare = (a, b) => {
-			// 	let textA = a.name.toLowerCase();
-			// 	let textB = b.name.toLowerCase();
-			// 	console.log(textA < textB ? -1 : textB > textA ? 1 : 0)
-			// 	return textA < textB ? -1 : textB > textA ? 1 : 0;
-					
-			// }
-			// // console.log(this.beers.sort(compare))
-			// 	return this.sorted *= this.beers.sort(compare)
-    }
-  }
+		}
+  },
 };
 </script>
 
