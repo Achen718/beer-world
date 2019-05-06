@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="headline my-2 text-xs-center">The Wondeful World of Beer</h1>
+    <h1 class="headline my-2 text-xs-center">The Wonderful World of Beer</h1>
     <v-container fluid>
       <!-- search bar / sort button -->
       <v-layout row>
@@ -10,7 +10,7 @@
             class="mx-3"
             flat
             type="text"
-            label="Search"
+            label="Search your ideal beer"
             v-model="search"
             color="pink lighten-1"
             prepend-inner-icon="search"
@@ -23,8 +23,8 @@
       </v-layout>
       <!-- Beer List -->
       <v-layout row wrap>
-        <v-flex xl2 md3 sm6 xs12 v-for="beer in filteredBeers" :key="beer.id" text-xs-center>
-          <ShowInfo :beer="beer"/>
+        <v-flex xl2 md3 sm6 xs12 v-for="(beer, index) in filteredBeers" :key="beer.id" text-xs-center>
+          <ShowInfo :beer="beer" :index="index"/>
         </v-flex>
         <!-- When the bottom is reached, watch:bottom informs API call to run -->
       </v-layout>
@@ -90,6 +90,7 @@ export default {
   methods: {
     // api call -- fetch beer
     generateBeer() {
+			let beers;
       this.$http
         .get(`/beers?page=${this.page}&per_page=12`)
         .then(response => {
@@ -97,7 +98,7 @@ export default {
             this.beers = response.data;
           } else {
             // generates beers on infinite scroll
-            let beers = this.beers.concat(response.data);
+            beers = this.beers.concat(response.data);
             this.beers = beers;
           }
           //  next page on scroll
@@ -120,5 +121,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>

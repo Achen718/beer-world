@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar fixed app>
+    <v-toolbar app fixed :clipped-left="clipped">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <!-- Route Home Title -->
       <router-link to="/" class="toolbar-title">
@@ -20,7 +20,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <!-- Nav Drawer Start -->
-    <v-navigation-drawer v-model="drawer" clipped absolute temporary width="300">
+    <v-navigation-drawer :clipped="clipped" v-model="drawer" app fixed>
       <v-list>
         <v-list-tile>
           <v-list-tile-title class="title mb-2 text-uppercase text-xs-center">MENU</v-list-tile-title>
@@ -45,7 +45,8 @@ export default {
   name: "Navigation",
   data() {
     return {
-      drawer: false,
+			drawer: false,
+			clipped: true,
       navItems: [
         { title: "Home", icon: "dashboard" },
         { title: "About", icon: "question_answer" }

@@ -1,20 +1,21 @@
 <template>
   <div>
-    <v-card flat :hover="true" class="ma-2" height="96%">
+    <v-card flat :hover="true" class="ma-2 beer-card">
       <v-layout row wrap align-center justify-center fill-height>
         <v-flex xs12 sm12 md12>
           <!-- Image for each Item -->
           <v-img :src="beer.image_url" :contain="true" height="200px" class="mt-3 mb-3"></v-img>
           <!-- Beer Card - info -->
-          <v-card-title primary-title class="beer-card">
+          <v-card-title primary-title class="beer-card-info">
             <v-flex xs12 sm12 md12>
-              <h3 class="headline">{{ beer.name }}</h3>
-              <h4 class="body-2">{{ beer.tagline }}</h4>
+              <p class="headline">{{ beer.name }}</p>
+              <p class="body-2">{{ beer.tagline }}</p>
+							<p>First Brewed in: {{ beer.first_brewed }}</p>
               <p class="mt-1 sub-info">ABV: {{ beer.abv }}%</p>
             </v-flex>
           </v-card-title>
         </v-flex>
-        <v-card-actions>
+        <v-card-actions class="mt-auto">
           <!-- Description Dropdown -->
           <v-btn color="blue" @click="toggle()" dark>Description</v-btn>
           <v-spacer></v-spacer>
@@ -37,7 +38,7 @@ export default {
   props: ['beer'],
   data() {
     return {
-      show: false
+      show: null
     };
   },
   methods: {
