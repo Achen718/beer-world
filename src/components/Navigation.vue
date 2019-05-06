@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar>
+    <v-toolbar fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <!-- Route Home Title -->
       <router-link to="/" class="toolbar-title">
@@ -20,7 +20,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <!-- Nav Drawer Start -->
-    <v-navigation-drawer v-model="drawer" clipped>
+    <v-navigation-drawer v-model="drawer" clipped absolute temporary width="300">
       <v-list>
         <v-list-tile>
           <v-list-tile-title class="title mb-2 text-uppercase text-md-center">MENU</v-list-tile-title>

@@ -13,39 +13,28 @@
           v-model="search"
           prepend-inner-icon="search"
         ></v-text-field>
-        <!-- <div v-for v-for="beer in filteredBeers" :key="beer.name"> -->
         <v-btn color="warning" fab dark @click="sorting *= -1">
           <v-icon>sort_by_alpha</v-icon>
         </v-btn>
-        <!-- </div> -->
-
-        <!-- <v-flex xs12 sm4 md3>
-        <p>Overflow</p>
-
-        <v-overflow-btn
-          :items="dropdown_font"
-          label="Overflow Btn"
-          target="#dropdown-example"
-        ></v-overflow-btn>
-        </v-flex>-->
       </v-layout>
       <v-layout row wrap>
         <!-- Beer List -->
-        <v-flex md6 sm12 xs12 v-for="beer in filteredBeers" :key="beer.id">
-          <v-card flat :hover="true" class="ma-2">
-            <v-layout row>
-              <v-flex xs4>
+        <v-flex xl2 md3 sm6 xs12 v-for="beer in filteredBeers" :key="beer.id" text-xs-center>
+          <v-card flat :hover="true" class="ma-2" height="96%">
+            <v-layout row wrap align-center justify-center fill-height>
+              <v-flex xs12 sm12 md12>
                 <v-img :src="beer.image_url" :contain="true" height="200px" class="mt-3 mb-3"></v-img>
-              </v-flex>
-              <v-flex xs8>
                 <v-card-title primary-title class="beer-card">
-                  <div>
-                    <h3 class="subtitle">{{ beer.name }}</h3>
+                  <v-flex xs12 sm12 md12>
+                    <h3 class="headline">{{ beer.name }}</h3>
                     <h4 class="body-2">{{ beer.tagline }}</h4>
                     <p class="mt-1">ABV: {{ beer.abv }}%</p>
-                  </div>
+                  </v-flex>
                 </v-card-title>
               </v-flex>
+              <v-card-actions>
+                <v-btn color="blue" @click="showBeerInfo(beer)">More Info</v-btn>
+              </v-card-actions>
             </v-layout>
           </v-card>
         </v-flex>
@@ -63,8 +52,9 @@ export default {
       beers: [],
       page: 1,
       bottom: false,
-			search: "",
-			sorting: -1
+      search: "",
+      sorting: -1,
+      dialog: false
     };
   },
   computed: {
@@ -75,17 +65,15 @@ export default {
     filteredBeers() {
       return this.beers.filter(beer => {
         return beer.name.toLowerCase().includes(this.search.toLowerCase());
-			});
-		},
-		// sort alphabetically
-		sortedItems () {
-				const compare = (a, b) => {
-				let textA = a.name.toLowerCase();
-				let textB = b.name.toLowerCase();
-				return a.name < b.name ? this.sorting : -this.sorting;
-			}
-				return this.beers.sort(compare)
-		}
+      });
+    },
+    // sort alphabetically + on scroll
+    sortedItems() {
+      const compare = (a, b) => {
+        return a.name < b.name ? this.sorting : -this.sorting;
+      };
+      return this.beers.sort(compare);
+    }
   },
   watch: {
     // generates beer on scroll
@@ -93,11 +81,10 @@ export default {
       if (oldVal) {
         this.generateBeer();
       }
-		},
-		sortedItems () {
-				console.log('test')
-    	
     },
+    sortedItems() {
+      console.log("Sorted");
+    }
   },
   created() {
     // on scroll to bottom, set bottom true
@@ -110,7 +97,7 @@ export default {
     // api call -- fetch beer
     generateBeer() {
       this.$http
-        .get(`/beers?page=${this.page}&per_page=10`)
+        .get(`/beers?page=${this.page}&per_page=24`)
         .then(response => {
           if (this.beers.length < 1) {
             this.beers = response.data;
@@ -118,15 +105,15 @@ export default {
             // generates beers on infinite scroll
             let beers = this.beers.concat(response.data);
             this.beers = beers;
-					}
-					//  next page on scroll
-					this.page += 1;
+          }
+          //  next page on scroll
+          this.page += 1;
         })
         .catch(e => console.log(e.response));
     },
     // Infinite scroll
     infiniteScroll() {
-			// reach window bottom
+      // reach window bottom
       let bottomOfWindow =
         document.documentElement.scrollTop + window.innerHeight ===
         document.documentElement.offsetHeight;
@@ -134,8 +121,14 @@ export default {
       if (bottomOfWindow) {
         return bottomOfWindow;
       }
-		}
-  },
+    },
+    showBeerInfo() {
+      this.$router.push(`/beers/${beer.id}`);
+    },
+    toggle() {
+      this.dialog = true;
+    }
+  }
 };
 </script>
 
