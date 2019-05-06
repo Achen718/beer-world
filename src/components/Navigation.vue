@@ -23,7 +23,7 @@
     <v-navigation-drawer v-model="drawer" clipped absolute temporary width="300">
       <v-list>
         <v-list-tile>
-          <v-list-tile-title class="title mb-2 text-uppercase text-md-center">MENU</v-list-tile-title>
+          <v-list-tile-title class="title mb-2 text-uppercase text-xs-center">MENU</v-list-tile-title>
         </v-list-tile>
         <!-- Menu Options via data object -->
         <v-list-tile v-for="item in navItems" :key="item.title">

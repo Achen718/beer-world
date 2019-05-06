@@ -1,26 +1,30 @@
 <template>
   <div>
-    <h1 class="subheading my-2">Choose Your Beer!</h1>
+    <h1 class="headline my-2 text-xs-center">The Wondeful World of Beer</h1>
     <v-container fluid>
       <!-- search bar / sort button -->
-      <v-layout>
-        <v-text-field
-          md3
-          class="mx-3"
-          flat
-          type="text"
-          label="Search"
-          v-model="search"
-          prepend-inner-icon="search"
-        ></v-text-field>
-        <v-btn color="warning" fab dark @click="sorting *= -1">
+      <v-layout row>
+        <v-flex xs6 offset-xs3>
+          <v-text-field
+            md3
+            class="mx-3"
+            flat
+            type="text"
+            label="Search"
+            v-model="search"
+            color="pink lighten-1"
+            prepend-inner-icon="search"
+          ></v-text-field>
+        </v-flex>
+        <!-- Sort Alpha Btn -->
+        <v-btn color="error" fab dark @click="sorting *= -1">
           <v-icon>sort_by_alpha</v-icon>
         </v-btn>
       </v-layout>
+      <!-- Beer List -->
       <v-layout row wrap>
-        <!-- Beer List -->
         <v-flex xl2 md3 sm6 xs12 v-for="beer in filteredBeers" :key="beer.id" text-xs-center>
-					<ShowInfo :beer="beer" />
+          <ShowInfo :beer="beer"/>
         </v-flex>
         <!-- When the bottom is reached, watch:bottom informs API call to run -->
       </v-layout>
@@ -29,26 +33,20 @@
 </template>
 
 <script>
-import ShowInfo from "@/components/ShowInfo"
+import ShowInfo from "@/components/ShowInfo";
 
 export default {
-	name: "Home",
-	components: {
-		ShowInfo
-	},
-	props:[
-		'beer'
-		],
+  name: "Home",
+  components: {
+    ShowInfo
+  },
   data() {
     return {
       beers: [],
       page: 1,
       bottom: false,
       search: "",
-      sorting: -1,
-      dialog: false,
-			show: false,
-			beerInfo: []
+      sorting: -1
     };
   },
   computed: {
@@ -69,6 +67,7 @@ export default {
       return this.beers.sort(compare);
     }
   },
+
   watch: {
     // generates beer on scroll
     bottom(oldVal) {
@@ -86,7 +85,8 @@ export default {
       this.bottom = this.infiniteScroll();
     });
     this.generateBeer();
-	},
+  },
+
   methods: {
     // api call -- fetch beer
     generateBeer() {
@@ -94,14 +94,14 @@ export default {
         .get(`/beers?page=${this.page}&per_page=12`)
         .then(response => {
           if (this.beers.length < 1) {
-						this.beers = response.data;
+            this.beers = response.data;
           } else {
             // generates beers on infinite scroll
-						let beers = this.beers.concat(response.data);
-						this.beers = beers;
+            let beers = this.beers.concat(response.data);
+            this.beers = beers;
           }
           //  next page on scroll
-          this.page ++;
+          this.page++;
         })
         .catch(e => console.log(e.response));
     },
@@ -115,9 +115,6 @@ export default {
       if (bottomOfWindow) {
         return bottomOfWindow;
       }
-    },
-    toggle() {
-      this.show = !this.show;
     }
   }
 };
