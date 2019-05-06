@@ -20,23 +20,7 @@
       <v-layout row wrap>
         <!-- Beer List -->
         <v-flex xl2 md3 sm6 xs12 v-for="beer in filteredBeers" :key="beer.id" text-xs-center>
-          <v-card flat :hover="true" class="ma-2" height="96%">
-            <v-layout row wrap align-center justify-center fill-height>
-              <v-flex xs12 sm12 md12>
-                <v-img :src="beer.image_url" :contain="true" height="200px" class="mt-3 mb-3"></v-img>
-                <v-card-title primary-title class="beer-card">
-                  <v-flex xs12 sm12 md12>
-                    <h3 class="headline">{{ beer.name }}</h3>
-                    <h4 class="body-2">{{ beer.tagline }}</h4>
-                    <p class="mt-1">ABV: {{ beer.abv }}%</p>
-                  </v-flex>
-                </v-card-title>
-              </v-flex>
-              <v-card-actions>
-                <v-btn color="blue" @click="showBeerInfo(beer)">More Info</v-btn>
-              </v-card-actions>
-            </v-layout>
-          </v-card>
+					<ShowInfo :beer="beer" />
         </v-flex>
         <!-- When the bottom is reached, watch:bottom informs API call to run -->
       </v-layout>
@@ -45,8 +29,16 @@
 </template>
 
 <script>
+import ShowInfo from "@/components/ShowInfo"
+
 export default {
-  name: "Home",
+	name: "Home",
+	components: {
+		ShowInfo
+	},
+	props:[
+		'beer'
+		],
   data() {
     return {
       beers: [],
@@ -54,7 +46,9 @@ export default {
       bottom: false,
       search: "",
       sorting: -1,
-      dialog: false
+      dialog: false,
+			show: false,
+			beerInfo: []
     };
   },
   computed: {
@@ -92,22 +86,22 @@ export default {
       this.bottom = this.infiniteScroll();
     });
     this.generateBeer();
-  },
+	},
   methods: {
     // api call -- fetch beer
     generateBeer() {
       this.$http
-        .get(`/beers?page=${this.page}&per_page=24`)
+        .get(`/beers?page=${this.page}&per_page=12`)
         .then(response => {
           if (this.beers.length < 1) {
-            this.beers = response.data;
+						this.beers = response.data;
           } else {
             // generates beers on infinite scroll
-            let beers = this.beers.concat(response.data);
-            this.beers = beers;
+						let beers = this.beers.concat(response.data);
+						this.beers = beers;
           }
           //  next page on scroll
-          this.page += 1;
+          this.page ++;
         })
         .catch(e => console.log(e.response));
     },
@@ -122,11 +116,8 @@ export default {
         return bottomOfWindow;
       }
     },
-    showBeerInfo() {
-      this.$router.push(`/beers/${beer.id}`);
-    },
     toggle() {
-      this.dialog = true;
+      this.show = !this.show;
     }
   }
 };
