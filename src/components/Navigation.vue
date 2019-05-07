@@ -11,7 +11,7 @@
       </router-link>
       <v-spacer></v-spacer>
       <!-- Avatar Link -->
-      <v-toolbar-items class="hidden-sm-and-down">
+      <v-toolbar-items>
         <v-btn flat route to="/about" fab>
           <v-avatar>
             <img src="https://i.imgur.com/B04J6mw.jpg" alt="Alvin">
@@ -26,7 +26,7 @@
           <v-list-tile-title class="title mb-2 text-uppercase text-xs-center">MENU</v-list-tile-title>
         </v-list-tile>
         <!-- Menu Options via data object -->
-        <v-list-tile v-for="item in navItems" :key="item.title">
+        <v-list-tile v-for="item in navItems" :key="item.title" router :to="item.route">
           <v-list-tile-action>
             <v-icon class="black--text">{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -48,8 +48,8 @@ export default {
 			drawer: false,
 			clipped: true,
       navItems: [
-        { title: "Home", icon: "dashboard" },
-        { title: "About", icon: "question_answer" }
+        { title: "Home", icon: "home", route: "/" },
+        { title: "About", icon: "person", route: "/about" }
       ]
     };
   }
