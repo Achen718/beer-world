@@ -1,6 +1,12 @@
 # Beer World
 
 ## Installation
+First clone repo
+```
+git clone https://github.com/Achen718/beer-world.git
+```
+After Getting to your directory via cd /usr/myapp 
+
 Install all dependencies
 ```
 yarn install
