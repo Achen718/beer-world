@@ -13,7 +13,7 @@ yarn install
 ```
 To run your Server
 ```
-yarn Serve
+yarn serve
 ```
 ## About this Project
 
