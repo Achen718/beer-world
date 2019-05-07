@@ -23,7 +23,7 @@
       </v-layout>
       <!-- Beer List -->
       <v-layout row wrap>
-        <v-flex xl2 md3 sm6 xs12 v-for="(beer, index) in filteredBeers" :key="beer.id" text-xs-center>
+        <v-flex xl3 md3 sm6 xs12 v-for="(beer, index) in filteredBeers" :key="beer.id" text-xs-center>
           <ShowInfo :beer="beer" :index="index"/>
         </v-flex>
         <!-- When the bottom is reached, watch:bottom informs API call to run -->
